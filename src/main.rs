@@ -24,11 +24,14 @@ async fn main() -> anyhow::Result<()> {
     );
 
     // Build the application with middleware
-    let app = Router::new().route("/health", get(health_handler)).layer(
-        ServiceBuilder::new()
-            .layer(TraceLayer::new_for_http())
-            .layer(CorsLayer::permissive()),
-    );
+    let app = Router::new()
+        .route("/health", post(health_handler))
+        .route("/health", get(health_handler))
+        .layer(
+            ServiceBuilder::new()
+                .layer(TraceLayer::new_for_http())
+                .layer(CorsLayer::permissive()),
+        );
 
     // Start the server
     let port = std::env::var("PORT")
