@@ -5,10 +5,11 @@ use axum::{
 use tower::ServiceBuilder;
 use tower_http::{cors::CorsLayer, trace::TraceLayer};
 use tracing::info;
+mod garaga;
 
-pub async fn health_handler() -> Json<serde_json::Value> {
+pub async fn calldata_handler() -> Json<serde_json::Value> {
     Json(serde_json::json!({
-        "status": "healthy",
+        "status": "calldatay",
         "timestamp": chrono::Utc::now().to_rfc3339(),
         "version": env!("CARGO_PKG_VERSION")
     }))
@@ -25,8 +26,8 @@ async fn main() -> anyhow::Result<()> {
 
     // Build the application with middleware
     let app = Router::new()
-        .route("/health", post(health_handler))
-        .route("/health", get(health_handler))
+        .route("/calldata", post(calldata_handler))
+        .route("/calldata", get(calldata_handler))
         .layer(
             ServiceBuilder::new()
                 .layer(TraceLayer::new_for_http())
